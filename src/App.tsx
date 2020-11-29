@@ -1,4 +1,5 @@
 import React from 'react';
+import {FormTwo} from "./components/Form";
 
 type TitleProps = {
   title: string
@@ -79,6 +80,7 @@ function App() {
       </Title>
       <Counter title='Count:'/>
       <Form/>
+      <FormTwo/>
     </div>
   );
 }
