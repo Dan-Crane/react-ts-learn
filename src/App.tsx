@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {FormTwo} from "./components/Form";
+import {ModalContent, Portal, PortalFC} from "./components/Portal";
 
 type TitleProps = {
   title: string
@@ -24,7 +25,7 @@ class Counter extends React.Component<CounterProps, CounterState> {
     }
   }
 
-  handelClick = (e : React.MouseEvent<HTMLButtonElement>) : void => {
+  handelClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
     console.log(e.clientX, e.clientY)
     this.setState(({count}) => ({
       count: ++count
@@ -39,16 +40,16 @@ class Counter extends React.Component<CounterProps, CounterState> {
   }
 }
 
-class Form extends React.Component<{}, {}>{
-  handelFocus = (e : React.FocusEvent<HTMLInputElement>) : void => {
+class Form extends React.Component<{}, {}> {
+  handelFocus = (e: React.FocusEvent<HTMLInputElement>): void => {
     console.log(e.target.value)
   }
 
-  handelSubmit = (e : React.FormEvent<HTMLFormElement>) : void => {
+  handelSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
     console.log('Submit')
   }
-  handelCopy = (e : React.ClipboardEvent<HTMLInputElement>) : void => {
+  handelCopy = (e: React.ClipboardEvent<HTMLInputElement>): void => {
     console.log(e.clipboardData.effectAllowed)
   }
 
@@ -72,15 +73,47 @@ class Form extends React.Component<{}, {}>{
   }
 }
 
-function App() {
+type AppState = {
+  portal: boolean
+}
+
+let App: React.FC = () => {
+  let [state, setState] = useState<AppState>({portal: false})
+  let {portal} = state
+
+  let handelPortal = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    setState({
+      ...state,
+      portal: !portal
+    })
+  }
+
   return (
-    <div className="App">
-      <Title title='test'>
-        <div>children</div>
-      </Title>
-      <Counter title='Count:'/>
-      <Form/>
-      <FormTwo/>
+    <div className="App" style={{overflow: "hidden", position: "relative"}}>
+      {/*<Title title='test'>*/}
+      {/*  <div>children</div>*/}
+      {/*</Title>*/}
+      {/*<Counter title='Count:'/>*/}
+      {/*<Form/>*/}
+      {/*<FormTwo/>*/}
+      <a onClick={handelPortal}>show portal</a>
+      {/*<Portal>*/}
+      {/*  {portal &&*/}
+      {/*  <div style={{background: 'red', position: "absolute", bottom: 20, left: 200}}>*/}
+      {/*    hello*/}
+      {/*  </div>*/}
+      {/*  }*/}
+      {/*</Portal>*/}
+      {/*<div style={{background: 'skyblue', position: "absolute", bottom: -10, right: 200}}>*/}
+      {/*  hello*/}
+      {/*</div>*/}
+      <PortalFC portal={portal} title='This FC Portal'>
+
+        <ModalContent setModalOpen={handelPortal}>
+
+        </ModalContent>
+
+      </PortalFC>
     </div>
   );
 }
